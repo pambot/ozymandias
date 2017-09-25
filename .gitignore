@@ -1,0 +1,14 @@
+# OS files
+*~
+*.pyc
+
+# extras
+cluster/
+lib/
+benchmark/
+models/
+
+# video files
+*.mp4
+
+

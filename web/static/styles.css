@@ -1,0 +1,17 @@
+body {
+  background-color: #2c2e30;
+  color: #f4f8ff;
+}
+
+.wall {
+  padding: 20px;
+  width: 3000px;
+}
+
+.screen {
+  float: left;
+  margin: 20px;
+  width: 304px;
+  height: 304px;
+  background-color: #ffcb30;
+}
