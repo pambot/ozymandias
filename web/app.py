@@ -1,7 +1,7 @@
 import base64
 import time
 from kafka import KafkaConsumer
-from flask import Flask, Response, render_template, url_for
+from flask import Flask, Response, render_template, request
 
 
 consumer = KafkaConsumer('flask', 
@@ -15,25 +15,26 @@ consumer = KafkaConsumer('flask',
 app = Flask(__name__)
 
 
-def gen():
+def gen(topic):
     """Video streaming generator function."""
     for msg in consumer:
-        if msg.key == '006039642c984a788569c7fea33ef3':
+        if msg.key == topic:
             yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + msg.value + b'\r\n')
+                   b'Content-Type: image/jpeg\r\n\r\n' + msg.value + b'\r\n')
 
 
-@app.route('/video_feed')
-def video_feed():
+@app.route('/video/<topic>')
+def video(topic):
     """Video streaming route. Put this in the src attribute of an img tag."""
-    return Response(gen(),
+    return Response(gen(topic),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-@app.route('/')
+@app.route('/ozymandias')
 def index():
     """Video streaming home page."""
-    return render_template('index.html')
+    topic = request.args.get('topic')
+    return render_template('index.html', topic=topic)
 
 
 if __name__ == '__main__':

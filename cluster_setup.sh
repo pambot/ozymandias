@@ -107,7 +107,7 @@ $SPARK_HOME/bin/spark-submit \
 --conf "spark.executor.cores=6" \
 --conf "spark.streaming.receiver.maxRate=0" \
 --py-files sparkstart.py \
-spark_streaming.py &
+spark_streaming.py
 
 # run app
 python web/app.py
