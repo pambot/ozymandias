@@ -3,9 +3,8 @@
 # set up pegasus stuff before starting
 
 # launch cluster
-peg up cluster/ozy-spark-master.yaml &
-peg up cluster/ozy-spark-worker.yaml &
-wait
+peg up cluster/ozy-spark-master.yaml
+peg up cluster/ozy-spark-worker.yaml
 
 peg fetch ozy-spark
 
@@ -21,6 +20,7 @@ peg install ozy-spark zookeeper
 peg install ozy-spark kafka
 peg install ozy-spark hadoop
 peg install ozy-spark spark
+peg install ozy-spark cassandra
 
 # install python packages
 peg sshcmd-cluster ozy-spark "sudo apt-get update"
@@ -34,6 +34,8 @@ peg sshcmd-cluster ozy-spark "echo 'export PYTHONPATH=\$SPARK_HOME/python:\$PYTH
 peg sshcmd-cluster ozy-spark "sudo pip install -U pip"
 peg sshcmd-cluster ozy-spark "sudo apt-get install -y libopencv-dev python-opencv"
 peg sshcmd-cluster ozy-spark "sudo pip install opencv-python"
+
+peg sshcmd-cluster ozy-spark "sudo pip install cassandra-driver"
 
 peg sshcmd-cluster ozy-spark "sudo pip install flask"
 
@@ -64,9 +66,9 @@ peg sshcmd-cluster ozy-spark "mkdir -p models"
 peg sshcmd-node ozy-spark 1 "mkdir -p data ; mkdir -p lib ; mkdir -p web"
 
 for n in $(seq 1 10) ; do
-#peg scp from-local ozy-spark $n models/haarcascade_frontalface_default.xml ./models
-#peg scp from-local ozy-spark $n models/haarcascade_profileface.xml ./models
-#peg scp from-local ozy-spark $n models/haarcascade_fullbody.xml ./models
+peg scp from-local ozy-spark $n models/haarcascade_frontalface_default.xml ./models
+peg scp from-local ozy-spark $n models/haarcascade_profileface.xml ./models
+peg scp from-local ozy-spark $n models/haarcascade_fullbody.xml ./models
 peg scp from-local ozy-spark $n spark_init.py ./
 done
 

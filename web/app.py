@@ -14,32 +14,12 @@ consumer = KafkaConsumer('flask',
 
 app = Flask(__name__)
 
-"""
-def image_generator(topic):
-    for msg in consumer:
-        if msg.key == topic:
-            yield ('--' + topic +'\r\n'
-                   'Content-Type: image/jpeg\r\n\r\niVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==\r\n')
-#unicode(base64.b64encode(msg.value))
-
-
-@app.route('/<topic>')
-def image_stream(topic):
-    return Response(image_generator(topic),
-                    mimetype='multipart/x-mixed-replace; boundary=' + topic)
-
-
-@app.route('/ozymandias')
-def index():
-    with open('topics.txt', 'r') as f:
-        topics = f.read().splitlines()
-    return render_template('index.html', topics=topics)
-"""
 
 def gen():
     """Video streaming generator function."""
     for msg in consumer:
-        yield (b'--frame\r\n'
+        if msg.key == '006039642c984a788569c7fea33ef3':
+            yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + msg.value + b'\r\n')
 
 
