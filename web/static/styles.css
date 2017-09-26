@@ -9,8 +9,6 @@ body {
 }
 
 .screen {
-  float: left;
-  margin: 20px;
   width: 304px;
   height: 304px;
   background-color: #ffcb30;

@@ -17,7 +17,7 @@ sc.setLogLevel('WARN')
 with open('topics.txt', 'r') as f:
     topics = f.read().splitlines()
 
-n_secs = 1
+n_secs = 0.5
 ssc = StreamingContext(sc, n_secs)
 stream = KafkaUtils.createDirectStream(ssc, topics, {
                     'bootstrap.servers':'localhost:9092', 
@@ -30,7 +30,6 @@ def detect_features(color):
     # opencv is BGR and channels are weighted
     color = cv2.cvtColor(color, cv2.COLOR_RGB2BGR)
     gray = cv2.cvtColor(color, cv2.COLOR_BGR2GRAY)
-    color = cv2.cvtColor(color, cv2.COLOR_BGR2RGB)
     
     # run facial detection
     face_detect = []
@@ -43,7 +42,7 @@ def detect_features(color):
     if face_detect:
         faces = np.vstack(face_detect)
         for (x, y, w, h) in faces:
-            color = cv2.rectangle(color, (x,y), (x+w,y+h), (255,255,0), 2)
+            color = cv2.rectangle(color, (x,y), (x+w,y+h), (0,255,255), 2)
     return color
 
 
