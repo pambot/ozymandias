@@ -13,6 +13,7 @@ ROOT = '/home/ubuntu/'
 
 
 def detect_features(color):
+    """Run Haar cascades on a BGR image and draw bounding rectangles"""
     # opencv is BGR and channels are weighted
     color = cv2.cvtColor(color, cv2.COLOR_RGB2BGR)
     gray = cv2.cvtColor(color, cv2.COLOR_BGR2GRAY)
@@ -33,16 +34,19 @@ def detect_features(color):
 
 
 def deserializer(m):
+    """Deserialize input (key, value) by JSON loading the value"""
     return m[0], np.array(json.loads(m[1]), dtype=np.uint8)
 
 
 def image_detector(m):
+    """Run `detect_features` and convert the result into bytes"""
     matrix = detect_features(m[1])
     res, jpg = cv2.imencode('.jpg', matrix)
     return m[0], jpg.tobytes()
 
 
 def message_sender(m):
+    """Send (key, value) to a Kafka producer"""
     client = SimpleClient('localhost:9092')
     producer = KeyedProducer(client)
     rdds = m.collect()
@@ -52,6 +56,7 @@ def message_sender(m):
 
 
 def main():
+    """Run Spark Streaming"""
     conf = SparkConf()
     sc = SparkContext(appName='Ozymandias', conf=conf)
     sc.setLogLevel('WARN')
