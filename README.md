@@ -40,13 +40,20 @@ Download the files by cloning this repositiory.
 
     git clone https://github.com/pambot/ozymandias.git
 
+Make some additional directories.
+
+    for newdir in raw data lib models ; do
+    mkdir -p $newdir
+    done
+
 Since they're published already, I didn't push the models I used into this repository. To obtain them, run:
 
-    mkdir models
     wget -P models https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml
     wget -P models https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_profileface.xml
 
-To make your own spoof data, run `mkdir -p raw ; mkdir -p data` and download some MPEG4 files from the link above into it. Then do some preprocessing:
+Download `spark-streaming-kafka-0-8-assembly_2.11-2.2.0.jar` from [Maven](https://mvnrepository.com/artifact/org.apache.spark/spark-streaming-kafka-0-8-assembly_2.11/2.2.0) and place it into `lib/`.
+
+To make your own spoof data, download some MPEG4 files from the link above into `raw/`. Then do some preprocessing to make the finished result appear in `data/`:
 
     python video_preprocess.py
 
@@ -62,7 +69,7 @@ These commands are for running the scripts found in the `src/` directory. I'm pu
     
     # run spark streaming
     $SPARK_HOME/bin/spark-submit \
-    --master spark://ec2-52-201-42-82.compute-1.amazonaws.com:7077 \
+    --master spark://<master node URL>:7077 \
     --jars lib/spark-streaming-kafka-0-8-assembly_2.11-2.2.0.jar \
     --conf "spark.streaming.concurrentJobs=10" \
     --conf "spark.executor.memory=2g" \
