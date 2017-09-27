@@ -2,6 +2,9 @@ import base64
 import time
 from kafka import KafkaConsumer
 from flask import Flask, Response, render_template, request
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
 
 
 consumer = KafkaConsumer('flask', 
@@ -10,7 +13,6 @@ consumer = KafkaConsumer('flask',
                          fetch_max_bytes=15728640,
                          max_partition_fetch_bytes=15728640,
                          group_id='flask-group')
-#for msg in consumer: print msg
 
 app = Flask(__name__)
 
@@ -30,7 +32,7 @@ def video(topic):
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-@app.route('/ozymandias')
+@app.route('/')
 def index():
     """Video streaming home page."""
     topic = request.args.get('topic')
@@ -38,6 +40,8 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=False, threaded=True)
+    http_server = HTTPServer(WSGIContainer(app))
+    http_server.listen(5000)
+    IOLoop.instance().start()
 
 

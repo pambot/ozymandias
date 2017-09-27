@@ -31,6 +31,7 @@ def video_loop(video_reader):
             continue
         topic = os.path.splitext(os.path.basename(fname))[0]
         producer.send(topic, key=topic, value=frame)
+        time.sleep(1.0/fps)
     return
 
 

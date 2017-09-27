@@ -2,7 +2,6 @@ import os
 import json
 import numpy as np
 import cv2
-import base64
 import sparkstart
 from pyspark import SparkContext, SparkConf, SparkFiles
 from pyspark.streaming import StreamingContext
@@ -10,20 +9,7 @@ from pyspark.streaming.kafka import KafkaUtils
 from kafka import SimpleClient, KeyedProducer
 
 
-conf = SparkConf()
-sc = SparkContext(appName='Ozymandias', conf=conf)
-sc.setLogLevel('WARN')
-
-with open('topics.txt', 'r') as f:
-    topics = f.read().splitlines()
-
-n_secs = 0.5
-ssc = StreamingContext(sc, n_secs)
-stream = KafkaUtils.createDirectStream(ssc, topics, {
-                    'bootstrap.servers':'localhost:9092', 
-                    'group.id':'ozy-group', 
-                    'fetch.message.max.bytes':'15728640',
-                    'auto.offset.reset':'largest'})
+ROOT = '/home/ubuntu/'
 
 
 def detect_features(color):
@@ -53,7 +39,7 @@ def deserializer(m):
 def image_detector(m):
     matrix = detect_features(m[1])
     res, jpg = cv2.imencode('.jpg', matrix)
-    return m[0], jpg.tostring()
+    return m[0], jpg.tobytes()
 
 
 def message_sender(m):
@@ -65,14 +51,35 @@ def message_sender(m):
     return
 
 
-stream.map(
-        deserializer
-    ).map(
-        image_detector
-    ).foreachRDD(
-        message_sender
-    )
+def main():
+    conf = SparkConf()
+    sc = SparkContext(appName='Ozymandias', conf=conf)
+    sc.setLogLevel('WARN')
+    
+    with open(ROOT + 'channels.json', 'r') as f:
+        channels = json.load(f)
+        topics = [t['topic'] for t in channels['channels']]
+    
+    n_secs = 1
+    ssc = StreamingContext(sc, n_secs)
+    stream = KafkaUtils.createDirectStream(ssc, topics, {
+                        'bootstrap.servers':'localhost:9092', 
+                        'group.id':'ozy-group', 
+                        'fetch.message.max.bytes':'15728640',
+                        'auto.offset.reset':'largest'})
+    
+    stream.map(
+            deserializer
+        ).map(
+            image_detector
+        ).foreachRDD(
+            message_sender)
+    
+    ssc.start()
+    ssc.awaitTermination()
 
-ssc.start()
-ssc.awaitTermination()
+
+if __name__ == '__main__':
+    main()
+
 

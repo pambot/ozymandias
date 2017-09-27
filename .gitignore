@@ -5,7 +5,7 @@
 # extras
 cluster/
 lib/
-benchmark/
+extra/
 models/
 
 # video files
