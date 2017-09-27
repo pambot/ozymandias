@@ -7,24 +7,8 @@ import cv2
 import numpy as np
 from kafka import KafkaProducer
 
-try:
-    fname = sys.argv[1]
-except IndexError:
-    print 'Missing file name.'
-    sys.exit()
 
-
-video_reader = imageio.get_reader(fname, 'ffmpeg')
-metadata = video_reader.get_meta_data()
-fps = metadata['fps']
-
-producer = KafkaProducer(bootstrap_servers='localhost:9092',
-                         batch_size=15728640,
-                         linger_ms=1000,
-                         max_request_size=15728640,
-                         value_serializer=lambda v: json.dumps(v.tolist()))
-
-def video_loop(video_reader):
+def video_loop(video_reader, fps):
     c = 0
     for frame in video_reader:
         if c % 2 != 0:
@@ -35,6 +19,28 @@ def video_loop(video_reader):
     return
 
 
-while True:
-    video_loop(video_reader)
+def main():
+    try:
+        fname = sys.argv[1]
+    except IndexError:
+        print 'Missing file name.'
+        sys.exit()
+    
+    video_reader = imageio.get_reader(fname, 'ffmpeg')
+    metadata = video_reader.get_meta_data()
+    fps = metadata['fps']
+
+    producer = KafkaProducer(bootstrap_servers='localhost:9092',
+                             batch_size=15728640,
+                             linger_ms=1000,
+                             max_request_size=15728640,
+                             value_serializer=lambda v: json.dumps(v.tolist()))
+    
+    while True:
+        video_loop(video_reader, fps)
+    
+
+if __name__ == '__main__':
+    main()
+
 
