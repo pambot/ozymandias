@@ -40,6 +40,12 @@ Download the files by cloning this repositiory.
 
     git clone https://github.com/pambot/ozymandias.git
 
+Since they're published already, I didn't push the models I used into this repository. To obtain them, run:
+
+    mkdir models
+    wget -P models https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml
+    wget -P models https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_profileface.xml
+
 To make your own spoof data, run `mkdir -p raw ; mkdir -p data` and download some MPEG4 files from the link above into it. Then do some preprocessing:
 
     python video_preprocess.py
