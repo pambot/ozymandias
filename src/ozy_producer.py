@@ -9,6 +9,7 @@ from kafka import KafkaProducer
 
 
 def video_loop(video_reader, fps):
+    """Iterate through frames, take every second frame, and pause for 1/fps"""
     c = 0
     for frame in video_reader:
         if c % 2 != 0:
@@ -20,6 +21,7 @@ def video_loop(video_reader, fps):
 
 
 def main():
+    """Stream the video into a Kafka producer in an infinite loop"""
     try:
         fname = sys.argv[1]
     except IndexError:
