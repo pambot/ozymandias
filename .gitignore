@@ -8,6 +8,9 @@ lib/
 extra/
 models/
 
+# design
+web/test_app.py
+
 # video files
 *.mp4
 

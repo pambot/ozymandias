@@ -71,9 +71,10 @@ These commands are for running the scripts found in the `src/` directory. I'm pu
     $SPARK_HOME/bin/spark-submit \
     --master spark://<master node URL>:7077 \
     --jars lib/spark-streaming-kafka-0-8-assembly_2.11-2.2.0.jar \
-    --conf "spark.streaming.concurrentJobs=10" \
+    --conf "spark.streaming.concurrentJobs=20" \
     --conf "spark.executor.memory=2g" \
     --conf "spark.executor.cores=6" \
+    --conf "spark.streaming.backpressure.enabled=true" \
     --py-files src/sparkstart.py \
     src/ozy_streaming.py
     
