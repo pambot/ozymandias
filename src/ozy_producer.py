@@ -8,7 +8,14 @@ import numpy as np
 from kafka import KafkaProducer
 
 
-def video_loop(video_reader, fps):
+try:
+    fname = sys.argv[1]
+except IndexError:
+    print 'Missing file name.'
+    sys.exit()
+
+
+def video_loop(video_reader, producer, fps):
     """Iterate through frames, take every second frame, and pause for 1/fps"""
     c = 0
     for frame in video_reader:
@@ -22,11 +29,6 @@ def video_loop(video_reader, fps):
 
 def main():
     """Stream the video into a Kafka producer in an infinite loop"""
-    try:
-        fname = sys.argv[1]
-    except IndexError:
-        print 'Missing file name.'
-        sys.exit()
     
     video_reader = imageio.get_reader(fname, 'ffmpeg')
     metadata = video_reader.get_meta_data()
@@ -39,7 +41,7 @@ def main():
                              value_serializer=lambda v: json.dumps(v.tolist()))
     
     while True:
-        video_loop(video_reader, fps)
+        video_loop(video_reader, producer, fps)
     
 
 if __name__ == '__main__':

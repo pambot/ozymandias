@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <script>
+
+var topic = "{{ topic }}";
+
     </script>
   </head>
   <body>
@@ -49,14 +52,14 @@
         <div class="row">
         
         <div class="col-lg-5" style="text-align:center;margin:auto">
-          <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+          <img src="{{ url_for('video', topic=topic) }}" width="304" height="304">
           <br/><br/>
           <h2>OpenCV Stream</h2>
           <p>A live-stream of OpenCV running image recognition using Haar cascades.</p>
         </div><!-- /.col-lg-4 -->
         
         <div class="col-lg-5" style="text-align:center;margin:auto">
-          <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+          <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="304" height="304">
           <br/><br/>
           <h2>Original</h2>
           <p>The original as a GIF from the Multimedia Commons YFCC100M dataset.</p>
@@ -72,6 +75,4 @@
 
   </body>
 </html>
-
-
 
