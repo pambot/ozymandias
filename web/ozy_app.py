@@ -1,5 +1,3 @@
-import base64
-import time
 from kafka import KafkaConsumer
 from flask import Flask, Response, render_template, request
 from tornado.wsgi import WSGIContainer

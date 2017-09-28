@@ -3,7 +3,7 @@ Ozymandias is pipeline for real-time, scalable processing of image recognition a
 
 ![Pipeline](https://github.com/pambot/ozymandias/blob/master/pipeline.png)
 
-I hosted this on AWS EC2 m4.xlarge instances running Ubuntu 14.04, which were set up and configured using Insight's in-house AWS EC2 manager [Pegasus](https://github.com/InsightDataScience/pegasus). The data used to spoof live feeds was downloaded in order of appearance from the Multimedia Commons [Flikr videos](http://multimedia-commons.s3-website-us-west-2.amazonaws.com/?prefix=data/videos/mp4/) from the YFCC100M dataset (Kafka essentially just plays these videos on a loop). The following guide assumes you have a cluster set up and ready to go.
+I hosted this on AWS EC2 m4.xlarge instances running Ubuntu 14.04, which were set up and configured using Insight's in-house AWS EC2 manager [Pegasus](https://github.com/InsightDataScience/pegasus). The data used to spoof live feeds was downloaded in order of appearance from the Multimedia Commons [Flickr videos](http://multimedia-commons.s3-website-us-west-2.amazonaws.com/?prefix=data/videos/mp4/) from the YFCC100M dataset (Kafka essentially just plays these videos on a loop). The following guide assumes you have a cluster set up and ready to go.
 
 ## Setup and Installation
 Dependencies:
