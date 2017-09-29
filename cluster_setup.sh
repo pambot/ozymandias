@@ -14,7 +14,7 @@ break
 fi
 done
 
-peg sshcmd-cluster ozy-cluster "echo 'export MASTER_NODE="$master"' >> ./.profile"
+peg sshcmd-cluster ozy-cluster "echo export MASTER_NODE=$master >> ./.profile"
 
 # set up ssh and aws
 peg install ozy-cluster ssh
@@ -68,8 +68,6 @@ peg sshcmd-cluster ozy-cluster "echo replica.fetch.max.bytes=15000000 >> /usr/lo
 peg sshcmd-cluster ozy-cluster "echo max.request.size=15000000 >> /usr/local/kafka/config/server.properties"
 peg sshcmd-cluster ozy-cluster "echo fetch.message.max.bytes=15000000 >> /usr/local/kafka/config/server.properties"
 
-# download data into raw and preprocess
-
 # put files into the cluster
 peg sshcmd-cluster ozy-cluster "git clone https://github.com/pambot/ozymandias.git"
 peg sshcmd-cluster ozy-cluster "mv ozymandias/* ./ ; rm -rf ozymandias"
@@ -92,6 +90,7 @@ done
 
 ## FOR EDITING
 : '
+
 for n in $(seq 1 10) ; do 
 peg scp from-local ozy-cluster $n src/ozy_producer.py ./src
 done
@@ -100,7 +99,8 @@ peg scp from-local ozy-cluster 1 src/ozy_streaming.py ./src
 peg scp from-local ozy-cluster 1 channels.json ./
 
 peg scp from-local ozy-cluster 2 web/ozy_app.py ./web
-peg scp from-local ozy-cluster 2 web/templates/index.html ./web/templates
+peg scp from-local ozy-cluster 2 web/templates/topic.html ./web/templates
+
 '
 
 

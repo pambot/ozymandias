@@ -23,9 +23,9 @@ done
 
 # kill all producers in cluster
 #peg sshcmd-cluster ozy-cluster "pkill -f producer"
+peg ssh ozy-cluster 1
 
 # submit spark
-MASTER_NODE=ec2-54-156-233-81.compute-1.amazonaws.com
 $SPARK_HOME/bin/spark-submit \
 --master spark://$MASTER_NODE:7077 \
 --jars lib/spark-streaming-kafka-0-8-assembly_2.11-2.2.0.jar \

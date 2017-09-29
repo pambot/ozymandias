@@ -1,13 +1,11 @@
+import os
 import json
 from kafka import KafkaConsumer
 from flask import Flask, Response, render_template, request
-from tornado.wsgi import WSGIContainer
-from tornado.httpserver import HTTPServer
-from tornado.ioloop import IOLoop
 
 
 consumer = KafkaConsumer('flask', 
-                         bootstrap_servers='localhost:9092', 
+                         bootstrap_servers=os.environ['MASTER_NODE']+':9092', 
                          auto_offset_reset='latest',
                          fetch_max_bytes=15728640,
                          max_partition_fetch_bytes=15728640,
@@ -17,12 +15,15 @@ ROOT = '/home/ubuntu/'
 app = Flask(__name__)
 
 
-def video_title(topic):
+def get_channels():
     """Spoofs database with a very small JSON file"""
     with open(ROOT + 'channels.json', 'r') as f:
         channels = json.load(f)
-        title = [t['title'] for t in channels['channels'] if t['topic']==topic][0]
-    return title
+    return channels
+
+
+def get_title(channels, topic):
+    return [ch['title'] for ch in channels['channels'] if ch['topic']==topic][0]
 
 
 def video_generator(topic):
@@ -40,11 +41,18 @@ def video(topic):
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
+@app.route('/<topic>')
+def topic(topic):
+    """Video streaming page."""
+    return render_template('topic.html', topic=topic, 
+                                         channels=get_channels(), 
+                                         title=get_title(get_channels(), topic))
+
+
 @app.route('/')
 def index():
-    """Video streaming home page."""
-    topic = request.args.get('topic')
-    return render_template('index.html', topic=topic, title=video_title(topic))
+    """Home page."""
+    return render_template('index.html', channels=get_channels())
 
 
 if __name__ == '__main__':

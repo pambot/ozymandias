@@ -65,7 +65,7 @@ def main():
         channels = json.load(f)
         topics = [t['topic'] for t in channels['channels']]
     
-    n_secs = 1
+    n_secs = 0.5
     ssc = StreamingContext(sc, n_secs)
     stream = KafkaUtils.createDirectStream(ssc, topics, {
                         'bootstrap.servers':'localhost:9092', 

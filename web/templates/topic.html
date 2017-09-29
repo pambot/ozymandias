@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <script>
 
+var topic = "{{ topic }}";
+var gif = topic + ".gif";
 var channels = {{ channels|tojson }};
 
     </script>
@@ -43,11 +45,27 @@ var channels = {{ channels|tojson }};
       <div class="jumbotron">
       
       <div class="col-sm-8 mx-auto" style="text-align:center">
-          <h1>Ozymandias</h1>
-          <br/>
-          <img src="{{ url_for('static', filename='ozymandias.jpg') }}" width="400"/>
+          <h1>{{ title }}</h1>
+        </div>
+      
+      <br/><br/>
+      
+        <div class="row">
+        
+        <div class="col-lg-5" style="text-align:center;margin:auto">
+          <img src="{{ url_for('video', topic=topic) }}" width="304" height="304">
           <br/><br/>
-          <p><b>This is a demo for real-time image recognition using Kafka and Spark Streaming. Check out the Channels dropdown menu to see examples of live processing in action.</b></p>
+          <h2>OpenCV Stream</h2>
+          <p>A live-stream of OpenCV running image recognition using Haar cascades.</p>
+        </div><!-- /.col-lg-4 -->
+        
+        <div class="col-lg-5" style="text-align:center;margin:auto">
+          <img src="{{ url_for('static', filename=gif) }}" width="304" height="304">
+          <br/><br/>
+          <h2>Original</h2>
+          <p>The original as a GIF from the Multimedia Commons YFCC100M dataset.</p>
+        </div><!-- /.col-lg-4 -->
+        
       </div>
       </div>
     </div>
