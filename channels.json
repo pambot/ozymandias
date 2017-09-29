@@ -1,13 +1,13 @@
 {"channels": [
-        {"topic": "010a37d3ee6f379df747d1af66c85f4", "name": "", "description": ""},
-        {"topic": "002d7deeeb4269e9c1960c1a7ce8", "name": "", "description": ""},
-        {"topic": "010a074acb1975c4d6d6e43c1faeb8", "name": "", "description": ""},
-        {"topic": "016a37b6c5e6ef2ea8b9532a69076", "name": "", "description": ""},
-        {"topic": "0026c01d82d86fab2f966bac04ddf", "name": "", "description": ""},
-        {"topic": "00959d3ca2f937a8b711c5d24a1f2", "name": "", "description": ""},
-        {"topic": "01046b6946ad8cd1b46595e555c43b5", "name": "", "description": ""},
-        {"topic": "01616ec3a3669e67979ccf791e82ee5", "name": "", "description": ""},
-        {"topic": "0094dd222bdbf103b92149ca3d74c", "name": "", "description": ""},
-        {"topic": "01629166c83b0c9fe702f67bdf50d", "name": "", "description": ""}
+        {"topic": "010a37d3ee6f379df747d1af66c85f4", "title": "Playing Kids"},
+        {"topic": "002d7deeeb4269e9c1960c1a7ce8", "title": "Man and the Sea"},
+        {"topic": "010a074acb1975c4d6d6e43c1faeb8", "title": "Boy in the Playground"},
+        {"topic": "016a37b6c5e6ef2ea8b9532a69076", "title": "The Birds"},
+        {"topic": "0026c01d82d86fab2f966bac04ddf", "title": "Graduation"},
+        {"topic": "00959d3ca2f937a8b711c5d24a1f2", "title": "Baby Phone Commercial"},
+        {"topic": "010c65549a3908ab619519949cce36e", "title": "Rocky Shore"},
+        {"topic": "006039642c984a788569c7fea33ef3", "title": "Dance Club"},
+        {"topic": "01013798371d53f8be2dba2e1508a", "title": "Rolling Kitty"},
+        {"topic": "00549072f6edf63938f46ff9a25fb4", "title": "Grassy Promenade"}
     ]
 }

@@ -7,6 +7,15 @@ peg up cluster/ozy-cluster-worker.yaml
 
 peg fetch ozy-cluster
 
+for w in $(peg describe ozy-cluster) ; do
+if [[ $w == *"ec2"* ]]; then
+master=$w
+break
+fi
+done
+
+peg sshcmd-cluster ozy-cluster "echo 'export MASTER_NODE="$master"' >> ./.profile"
+
 # set up ssh and aws
 peg install ozy-cluster ssh
 peg install ozy-cluster aws
@@ -20,47 +29,51 @@ peg install ozy-cluster kafka
 peg install ozy-cluster hadoop
 peg install ozy-cluster spark
 
-# install python packages
+# python general
 peg sshcmd-cluster ozy-cluster "sudo apt-get update"
 peg sshcmd-cluster ozy-cluster "sudo apt-get -y upgrade"
+peg sshcmd-cluster ozy-cluster "sudo shutdown -r now"
+sleep 10
 peg sshcmd-cluster ozy-cluster "sudo pip install -U pip"
 
-peg sshcmd-cluster ozy-cluster "sudo pip install boto3"
+# python producers
 peg sshcmd-cluster ozy-cluster "sudo pip install kafka-python"
 peg sshcmd-cluster ozy-cluster "sudo pip install imageio"
 peg sshcmd-cluster ozy-cluster "python -c 'import imageio ; imageio.plugins.ffmpeg.download()'"
 peg sshcmd-cluster ozy-cluster "sudo pip install -U imageio"
+
+# python spark
 peg sshcmd-cluster ozy-cluster "sudo pip install py4j"
 peg sshcmd-cluster ozy-cluster "echo 'export PYTHONPATH=\$SPARK_HOME/python:\$PYTHONPATH' >> ./.profile"
 
+# python image recognition
 peg sshcmd-cluster ozy-cluster "sudo apt-get install -y libopencv-dev python-opencv"
 peg sshcmd-cluster ozy-cluster "sudo pip install opencv-python"
 
+# python web
 peg sshcmd-cluster ozy-cluster "sudo pip install flask"
+peg sshcmd-cluster ozy-cluster "sudo apt-get install -y libopencv-dev python-opencv"
+peg sshcmd-cluster ozy-cluster "sudo apt-get install -y nginx"
+peg sshcmd-cluster ozy-cluster "sudo pip install gunicorn"
+peg sshcmd-cluster ozy-cluster "sudo pip install gevent"
 
 # configure kafka
-peg sshcmd-cluster ozy-cluster "sed -i '/delete.topic.enable/c\delete.topic.enable=true' /usr/local/kafka/config/server.properties"
-peg sshcmd-cluster ozy-cluster "sed -i '/num.partitions/c\num.partitions=6' /usr/local/kafka/config/server.properties"
-peg sshcmd-cluster ozy-cluster "sed -i '/log.retention.hours/c\log.retention.hours=1' /usr/local/kafka/config/server.properties"
-peg sshcmd-cluster ozy-cluster "sed -i '/log.retention.bytes/c\log.retention.bytes=1073741824' /usr/local/kafka/config/server.properties"
+peg sshcmd-cluster ozy-cluster "sed -i '/delete.topic.enable=/c\delete.topic.enable=true' /usr/local/kafka/config/server.properties"
+peg sshcmd-cluster ozy-cluster "sed -i '/num.partitions=/c\num.partitions=6' /usr/local/kafka/config/server.properties"
+peg sshcmd-cluster ozy-cluster "sed -i '/log.retention.hours=/c\log.retention.hours=1' /usr/local/kafka/config/server.properties"
+peg sshcmd-cluster ozy-cluster "sed -i '/log.retention.bytes=/c\log.retention.bytes=10000000000' /usr/local/kafka/config/server.properties"
 
-peg sshcmd-cluster ozy-cluster "echo message.max.bytes=15728640 >> /usr/local/kafka/config/server.properties"
-peg sshcmd-cluster ozy-cluster "echo replica.fetch.max.bytes=15728640 >> /usr/local/kafka/config/server.properties"
-peg sshcmd-cluster ozy-cluster "echo max.request.size=15728640 >> /usr/local/kafka/config/server.properties"
-peg sshcmd-cluster ozy-cluster "echo fetch.message.max.bytes=15728640 >> /usr/local/kafka/config/server.properties"
-
-# start services
-peg service ozy-cluster zookeeper start
-peg service ozy-cluster kafka start &
-peg service ozy-cluster hadoop start
-peg service ozy-cluster spark start
+peg sshcmd-cluster ozy-cluster "echo message.max.bytes=15000000 >> /usr/local/kafka/config/server.properties"
+peg sshcmd-cluster ozy-cluster "echo replica.fetch.max.bytes=15000000 >> /usr/local/kafka/config/server.properties"
+peg sshcmd-cluster ozy-cluster "echo max.request.size=15000000 >> /usr/local/kafka/config/server.properties"
+peg sshcmd-cluster ozy-cluster "echo fetch.message.max.bytes=15000000 >> /usr/local/kafka/config/server.properties"
 
 # download data into raw and preprocess
 
 # put files into the cluster
 peg sshcmd-cluster ozy-cluster "git clone https://github.com/pambot/ozymandias.git"
 peg sshcmd-cluster ozy-cluster "mv ozymandias/* ./ ; rm -rf ozymandias"
-peg sshcmd-cluster ozy-cluster "mkdir models ; mkdir data ; mkdir lib"
+peg sshcmd-cluster ozy-cluster "mkdir -p models ; mkdir -p data ; mkdir -p lib"
 
 for n in $(seq 1 10) ; do
 peg scp from-local ozy-cluster $n models/haarcascade_frontalface_default.xml ./models

@@ -1,3 +1,4 @@
+import json
 from kafka import KafkaConsumer
 from flask import Flask, Response, render_template, request
 from tornado.wsgi import WSGIContainer
@@ -12,10 +13,19 @@ consumer = KafkaConsumer('flask',
                          max_partition_fetch_bytes=15728640,
                          group_id='flask-group')
 
+ROOT = '/home/ubuntu/'
 app = Flask(__name__)
 
 
-def gen(topic):
+def video_title(topic):
+    """Spoofs database with a very small JSON file"""
+    with open(ROOT + 'channels.json', 'r') as f:
+        channels = json.load(f)
+        title = [t['title'] for t in channels['channels'] if t['topic']==topic][0]
+    return title
+
+
+def video_generator(topic):
     """Video streaming generator function."""
     for msg in consumer:
         if msg.key == topic:
@@ -26,7 +36,7 @@ def gen(topic):
 @app.route('/video/<topic>')
 def video(topic):
     """Video streaming route. Put this in the src attribute of an img tag."""
-    return Response(gen(topic),
+    return Response(video_generator(topic),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
@@ -34,7 +44,7 @@ def video(topic):
 def index():
     """Video streaming home page."""
     topic = request.args.get('topic')
-    return render_template('index.html', topic=topic)
+    return render_template('index.html', topic=topic, title=video_title(topic))
 
 
 if __name__ == '__main__':
