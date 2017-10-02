@@ -5,6 +5,7 @@
 peg up cluster/ozy-cluster-master.yaml
 peg up cluster/ozy-cluster-worker.yaml
 
+ssh-agent -s
 peg fetch ozy-cluster
 
 for w in $(peg describe ozy-cluster) ; do
@@ -52,7 +53,6 @@ peg sshcmd-cluster ozy-cluster "sudo pip install opencv-python"
 
 # python web
 peg sshcmd-cluster ozy-cluster "sudo pip install flask"
-peg sshcmd-cluster ozy-cluster "sudo apt-get install -y libopencv-dev python-opencv"
 peg sshcmd-cluster ozy-cluster "sudo apt-get install -y nginx"
 peg sshcmd-cluster ozy-cluster "sudo pip install gunicorn"
 peg sshcmd-cluster ozy-cluster "sudo pip install gevent"
@@ -88,7 +88,8 @@ peg scp from-local ozy-cluster $n $video ./data
 done
 done
 
-## FOR EDITING
+
+## FOR EDITING AND WEB
 : '
 
 for n in $(seq 1 10) ; do 
@@ -100,6 +101,13 @@ peg scp from-local ozy-cluster 1 channels.json ./
 
 peg scp from-local ozy-cluster 2 web/ozy_app.py ./web
 peg scp from-local ozy-cluster 2 web/templates/topic.html ./web/templates
+peg scp from-local ozy-cluster 2 web/templates/index.html ./web/templates
+
+for video in $(ls data/*.mp4) ; do ffmpeg -i $video  -r 5 "frames/$(basename $video .mp4)-%03d.jpg" ; done
+
+for video in $(ls data/*.mp4) ; do convert -delay 20 -loop 0 -layers Optimize "frames/$(basename $video .mp4)-*.jpg" "web/static/$(basename $video .mp4).gif" ; echo "Done $video" ; done
+
+for gif in $(ls web/static/*.gif) ; do peg scp from-local ozy-cluster 2 $gif ./web/static ; done
 
 '
 

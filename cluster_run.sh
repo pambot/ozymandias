@@ -1,5 +1,5 @@
 peg service ozy-cluster zookeeper start
-peg service ozy-cluster kafka start
+peg service ozy-cluster kafka start &
 peg service ozy-cluster hadoop start
 peg service ozy-cluster spark start
 
@@ -40,7 +40,7 @@ src/ozy_streaming.py
 peg ssh ozy-cluster 2
 
 cd web
-gunicorn ozy_app:app  --bind 0.0.0.0:5000 -k gevent -w 4
+gunicorn ozy_app:app  --bind 0.0.0.0:5000 -k gevent -w 8
 
 
 

@@ -7,11 +7,12 @@ cluster/
 lib/
 extra/
 models/
+frames/
 
 # design
 web/test_app.py
 
 # video files
 *.mp4
-
+*.gif
 

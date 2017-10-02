@@ -19,11 +19,11 @@ def video_loop(video_reader, producer, fps):
     """Iterate through frames, take every second frame, and pause for 1/fps"""
     c = 0
     for frame in video_reader:
-        if c % 2 != 0:
+        if c % 6 != 0:
             continue
         topic = os.path.splitext(os.path.basename(fname))[0]
         producer.send(topic, key=topic, value=frame)
-        time.sleep(1.0/fps)
+        #time.sleep(1.0/fps)
     return
 
 

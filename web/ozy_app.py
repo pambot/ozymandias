@@ -1,11 +1,11 @@
 import os
 import json
 from kafka import KafkaConsumer
-from flask import Flask, Response, render_template, request
+from flask import Flask, Response, render_template
 
 
 consumer = KafkaConsumer('flask', 
-                         bootstrap_servers=os.environ['MASTER_NODE']+':9092', 
+                         bootstrap_servers='localhost:9092', 
                          auto_offset_reset='latest',
                          fetch_max_bytes=15728640,
                          max_partition_fetch_bytes=15728640,
