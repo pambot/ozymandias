@@ -78,8 +78,6 @@ peg scp from-local ozy-cluster $n models/haarcascade_frontalface_default.xml ./m
 peg scp from-local ozy-cluster $n models/haarcascade_profileface.xml ./models
 done
 
-peg sshcmd-cluster ozy-cluster "echo 'export PYTHONPATH=\$HOME/src:\$PYTHONPATH' >> ./.profile"
-
 peg scp from-local ozy-cluster 1 lib/spark-streaming-kafka-0-8-assembly_2.11-2.2.0.jar ./lib
 
 for n in 3 4 ; do
@@ -92,12 +90,15 @@ done
 ## FOR EDITING AND WEB
 : '
 
-for n in $(seq 1 10) ; do 
+for n in 3 4 ; do 
 peg scp from-local ozy-cluster $n src/ozy_producer.py ./src
 done
 
 peg scp from-local ozy-cluster 1 src/ozy_streaming.py ./src
-peg scp from-local ozy-cluster 1 channels.json ./
+
+for n in $(seq 1 10) ; do 
+peg scp from-local ozy-cluster $n channels.json ./
+done
 
 peg scp from-local ozy-cluster 2 web/ozy_app.py ./web
 peg scp from-local ozy-cluster 2 web/templates/topic.html ./web/templates

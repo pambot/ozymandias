@@ -4,6 +4,9 @@ from kafka import KafkaConsumer
 from flask import Flask, Response, render_template
 
 
+ROOT = os.getenv('HOME') + '/'
+
+
 consumer = KafkaConsumer('flask', 
                          bootstrap_servers='localhost:9092', 
                          auto_offset_reset='latest',
@@ -11,7 +14,6 @@ consumer = KafkaConsumer('flask',
                          max_partition_fetch_bytes=15728640,
                          group_id='flask-group')
 
-ROOT = '/home/ubuntu/'
 app = Flask(__name__)
 
 

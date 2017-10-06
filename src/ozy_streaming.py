@@ -9,7 +9,7 @@ from pyspark.streaming.kafka import KafkaUtils
 from kafka import SimpleClient, KeyedProducer
 
 
-ROOT = '/home/ubuntu/'
+ROOT = os.getenv('HOME') + '/'
 
 
 def detect_features(color):
@@ -63,7 +63,7 @@ def main():
     
     with open(ROOT + 'channels.json', 'r') as f:
         channels = json.load(f)
-        topics = [t['topic'] for t in channels['channels']]
+    topics = [t['topic'] for t in channels['channels']]
     
     n_secs = 0.5
     ssc = StreamingContext(sc, n_secs)

@@ -57,13 +57,13 @@ To make your own spoof data, download some MPEG4 files from the link above into 
 
     python video_preprocess.py
 
-Open up `channels.json` and fill it in with your own spoof metadata (in real life, this should be on a database).
+Open up `channels.json` and fill it in with your own spoof metadata. In real life, this should definitely be on a database, but I left it as a JSON file due to time constraints.
 
 ## Running the Scripts
 These commands are for running the scripts found in the `src/` directory. I'm putting them here in one place, but you may not want to run these in the same node.
 
     # run the kafka producers
-    for t in <list of topics> ; do
+    for t in $(seq 0 <number of channels - 1>) ; do
     python src/ozy_producer.py data/$t.mp4 &
     done
     

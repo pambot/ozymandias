@@ -8,29 +8,33 @@ import numpy as np
 from kafka import KafkaProducer
 
 
-try:
-    fname = sys.argv[1]
-except IndexError:
-    print 'Missing file name.'
-    sys.exit()
+ROOT = os.getenv('HOME') + '/'
+DATA = ROOT + 'data/'
 
 
-def video_loop(video_reader, producer, fps):
-    """Iterate through frames, take every second frame, and pause for 1/fps"""
+def choose_channel(n):
+    with open(ROOT + 'channels.json', 'r') as f:
+        channels = json.load(f)
+    topic = [t['topic'] for i, t in enumerate(channels['channels']) if i==n][0]
+    return str(topic)
+
+
+def video_loop(video_reader, producer, topic, fps):
+    """Iterate through frames and pass to the producer"""
     c = 0
     for frame in video_reader:
-        if c % 6 != 0:
+        if c % 3 != 0:
             continue
-        topic = os.path.splitext(os.path.basename(fname))[0]
         producer.send(topic, key=topic, value=frame)
-        #time.sleep(1.0/fps)
+        # time.sleep(3/fps)
     return
 
 
-def main():
+def main(n):
     """Stream the video into a Kafka producer in an infinite loop"""
     
-    video_reader = imageio.get_reader(fname, 'ffmpeg')
+    topic = choose_channel(n)
+    video_reader = imageio.get_reader(DATA + topic + '.mp4', 'ffmpeg')
     metadata = video_reader.get_meta_data()
     fps = metadata['fps']
 
@@ -41,10 +45,16 @@ def main():
                              value_serializer=lambda v: json.dumps(v.tolist()))
     
     while True:
-        video_loop(video_reader, producer, fps)
+        video_loop(video_reader, producer, topic, fps)
     
 
 if __name__ == '__main__':
-    main()
+    try:
+        n = int(sys.argv[1])
+    except (IndexError, ValueError):
+        print 'Invalid channel choice. Use case: `python ozy_producer.py 1`'
+        sys.exit()
+    
+    main(n)
 
 
