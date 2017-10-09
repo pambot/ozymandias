@@ -30,6 +30,7 @@ $SPARK_HOME/bin/spark-submit \
 --conf "spark.executor.memory=2g" \
 --conf "spark.executor.cores=6" \
 --conf "spark.streaming.backpressure.enabled=true" \
+--supervise \
 --py-files src/sparkstart.py \
 src/ozy_streaming.py &
 
@@ -37,7 +38,7 @@ src/ozy_streaming.py &
 peg ssh ozy-cluster 2
 
 cd web
-gunicorn ozy_app:app  --bind 0.0.0.0:5000 -k gevent -w 8
+gunicorn ozy_app:app --daemon --bind 0.0.0.0:8000 --worker-class gevent --workers 8
 
 
 

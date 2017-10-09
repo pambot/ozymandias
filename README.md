@@ -13,6 +13,7 @@ Dependencies:
 * Hadoop 2.7.4
 * Spark 2.1.1
 * OpenCV 3.1.0
+* NGINX 1.4.6
 
 Python dependencies can be found in the `requirements.txt` file (make sure you update `pip`). `imageio` requires `ffmpeg`, which can be obtained by running this after installing the Python dependencies:
 
@@ -64,7 +65,7 @@ These commands are for running the scripts found in the `src/` directory. I'm pu
 
     # run the kafka producers
     for t in $(seq 0 <number of channels - 1>) ; do
-    python src/ozy_producer.py data/$t.mp4 &
+    python src/ozy_producer.py $t &
     done
     
     # run spark streaming
@@ -79,5 +80,10 @@ These commands are for running the scripts found in the `src/` directory. I'm pu
     src/ozy_streaming.py
     
     # run the web app
-    python web/ozy_app.py
+    cd web
+    gunicorn ozy_app:app  --bind 0.0.0.0:5000 -k gevent -w 8
 
+## Viewing the Demo
+I made a deal with Insight that I could have a larger cluster than usual if I didn't have it on all of the time, which was necessary because image processing is very compute-intensive. Thus, I'm including the site here, but I also have to include the disclaimer that it will only be active when I'm demoing. I'll be including a screencast very soon.
+
+Demo link: [Ozymandias](http://34.233.148.221)

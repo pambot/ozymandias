@@ -86,6 +86,9 @@ peg scp from-local ozy-cluster $n $video ./data
 done
 done
 
+peg sshcmd-node ozy-cluster 2 "sudo mv -f web/conf/ozymandias /etc/nginx/sites-available"
+peg sshcmd-node ozy-cluster 2 "sudo ln -s /etc/nginx/sites-available/ozymandias /etc/nginx/sites-enabled"
+peg sshcmd-node ozy-cluster 2 "sudo service nginx restart"
 
 ## FOR EDITING AND WEB
 : '

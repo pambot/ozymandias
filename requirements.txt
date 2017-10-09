@@ -3,3 +3,5 @@ imageio==2.2.0
 py4j==0.10.6
 opencv-python==3.1.0
 flask==0.12.2
+gunicorn==19.7.1
+gevent==1.2.2

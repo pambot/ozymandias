@@ -20,13 +20,13 @@ def choose_channel(n):
 
 
 def video_loop(video_reader, producer, topic, fps):
-    """Iterate through frames and pass to the producer"""
+    """Iterate through frames and pass to the producer (with timing calibration)"""
     c = 0
     for frame in video_reader:
         if c % 3 != 0:
             continue
         producer.send(topic, key=topic, value=frame)
-        # time.sleep(3/fps)
+        #time.sleep(1.0/fps)
     return
 
 
