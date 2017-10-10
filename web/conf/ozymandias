@@ -1,10 +1,11 @@
 server {
     listen 80;
-    server_name 34.233.148.221;
+    server_name ozymandias.site www.ozymandias.site;
     
     location / {
         include proxy_params;
         proxy_pass http://127.0.0.1:8000;
+        proxy_buffering off;
     }
 }
 

@@ -1,19 +1,11 @@
 import os
 import json
+import time
 from kafka import KafkaConsumer
 from flask import Flask, Response, render_template
 
 
 ROOT = os.getenv('HOME') + '/'
-
-
-consumer = KafkaConsumer('flask', 
-                         bootstrap_servers='localhost:9092', 
-                         auto_offset_reset='latest',
-                         fetch_max_bytes=15728640,
-                         max_partition_fetch_bytes=15728640,
-                         group_id='flask-group')
-
 app = Flask(__name__)
 
 
@@ -30,10 +22,17 @@ def get_title(channels, topic):
 
 def video_generator(topic):
     """Video streaming generator function."""
+    consumer = KafkaConsumer('flask', 
+                         bootstrap_servers='localhost:9092', 
+                         auto_offset_reset='latest',
+                         fetch_max_bytes=15728640,
+                         max_partition_fetch_bytes=15728640,
+                         group_id=topic)
     for msg in consumer:
         if msg.key == topic:
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + msg.value + b'\r\n')
+            time.sleep(0.1)
 
 
 @app.route('/video/<topic>')

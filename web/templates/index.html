@@ -45,7 +45,7 @@ var channels = {{ channels|tojson }};
       <div class="col-sm-8 mx-auto" style="text-align:center">
           <h1>Ozymandias</h1>
           <br/>
-          <img src="{{ url_for('static', filename='ozymandias.jpg') }}" width="400"/>
+          <img src="{{ url_for('static', filename='ozymandias.jpg') }}" style="max-width:75%; height:auto;"/>
           <br/><br/>
           <p><b>This is a demo for real-time image recognition using Kafka and Spark Streaming. Check out the Channels dropdown menu to see examples of live processing in action.</b></p>
       </div>

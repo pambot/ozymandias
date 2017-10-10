@@ -106,6 +106,7 @@ done
 peg scp from-local ozy-cluster 2 web/ozy_app.py ./web
 peg scp from-local ozy-cluster 2 web/templates/topic.html ./web/templates
 peg scp from-local ozy-cluster 2 web/templates/index.html ./web/templates
+peg scp from-local ozy-cluster 2 web/conf/ozymandias ./web/conf/ozymandias
 
 for video in $(ls data/*.mp4) ; do ffmpeg -i $video  -r 5 "frames/$(basename $video .mp4)-%03d.jpg" ; done
 
