@@ -84,6 +84,7 @@ These commands are for running the scripts found in the `src/` directory. I'm pu
     gunicorn ozy_app:app  --bind 0.0.0.0:5000 -k gevent -w 8
 
 ## Viewing the Demo
-I made a deal with Insight that I could have a larger cluster than usual if I didn't have it on all of the time, which was necessary because image processing is very compute-intensive. Thus, I'm including the site here, but I also have to include the disclaimer that it will only be active when I'm demoing. I'll be including a screencast very soon.
+I made a deal with Insight that I could have a larger cluster than usual if I didn't have it on all of the time, which was necessary because image processing is very compute-intensive. Thus, I'm including the site here, but I also have to include the disclaimer that it will only be active when I'm demoing. Instead, please check out my demo video!
 
-Demo link: [Ozymandias](http://34.233.148.221)
+Demo link: [Ozymandias](http://www.ozymandias.site)
+Demo video: [Ozymandias](https://drive.google.com/open?id=0B0yLhQa2ZfVbOXQ3VXREZnF1cG8)

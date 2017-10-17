@@ -23,7 +23,11 @@ done
 peg ssh ozy-cluster 1
 
 # submit spark with monitoring
-OzyStreaming() {
+while true  ; do 
+if [[ $(ps -aux | grep "ozy_streaming" | grep -v "grep") ]] ; then 
+echo "Spark is still running..."
+sleep 10
+else 
 $SPARK_HOME/bin/spark-submit \
 --master spark://$MASTER_NODE:7077 \
 --jars lib/spark-streaming-kafka-0-8-assembly_2.11-2.2.0.jar \
@@ -33,21 +37,16 @@ $SPARK_HOME/bin/spark-submit \
 --conf "spark.streaming.backpressure.enabled=true" \
 --py-files src/sparkstart.py \
 src/ozy_streaming.py &
-}
-
-until OzyStreaming ; do
-    echo "Stopped with exit code $?.  Respawning.." >&2
-    sleep 1
-done
+sleep 60
+fi
+done &
 
 # run app
 peg ssh ozy-cluster 2
 
 sudo service nginx restart
 cd web
-gunicorn ozy_app:app --daemon --bind 0.0.0.0:8000 --worker-class gevent --workers 1
-
-
+gunicorn ozy_app:app --daemon --bind localhost:8000 --worker-class gevent --workers 1
 
 
 
